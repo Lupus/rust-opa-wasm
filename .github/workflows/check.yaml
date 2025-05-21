@@ -129,48 +129,6 @@ jobs:
       - name: Test
         run: cargo test --all-features --locked
 
-  coverage:
-    name: Code coverage
-    needs: [rustfmt, clippy]
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
-      - name: Install toolchain
-        run: |
-          rustup toolchain install stable
-          rustup default stable
-
-      - name: Setup Rust cache
-        uses: Swatinem/rust-cache@v2
-
-      - name: Install cargo-llvm-cov
-        uses: taiki-e/install-action@cargo-llvm-cov
-
-      - name: Setup OPA
-        uses: open-policy-agent/setup-opa@v2
-        with:
-          version: latest
-
-      - name: Build OPA bundles for test
-        run: make build-opa
-
-      - name: Run test suite with profiling enabled
-        run: |
-          cargo llvm-cov --all-features --no-fail-fast --tests --codecov --output-path codecov.json
-
-      - name: Upload to codecov.io
-        uses: codecov/codecov-action@v5
-        with:
-          files: codecov.json
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-
   tests-done:
     name: Tests done
     if: ${{ always() }}
@@ -178,7 +136,6 @@ jobs:
       - rustfmt
       - clippy
       - test
-      - coverage
       - minimal-versions
     runs-on: ubuntu-latest
 
