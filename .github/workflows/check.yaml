@@ -2,9 +2,7 @@ name: Check
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: [fork]
 
 env:
   CARGO_TERM_COLOR: always
@@ -51,18 +49,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Run Clippy
-        run: |
-          run_clippy () {
-            echo "::group::cargo clippy $@"
-            cargo clippy --bins --tests $@ -- -D warnings
-            echo "::endgroup::"
-          }
-
-          run_clippy --all-features
-          run_clippy --no-default-features
-          sed -e 's/#.*//' -e '/^\s*$/d' -e 's/\s\+/,/g' features.txt | while read -r FEATURES; do
-            run_clippy --no-default-features --features "${FEATURES}"
-          done
+        run: ./clippy.sh
 
   test:
     name: Run test suite with Rust ${{ matrix.toolchain }}
