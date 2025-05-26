@@ -106,7 +106,7 @@ fast = ["wasmtime/cranelift", "wasmtime/parallel-compilation"]
 
 rng = ["dep:rand"]
 time = ["dep:chrono"]
-http = ["dep:http"]
+http = ["dep:http", "tokio/time"]
 
 base64url-builtins = ["dep:base64", "dep:hex"]
 crypto-digest-builtins = ["dep:digest", "dep:hex"]
@@ -121,7 +121,7 @@ json-builtins = ["dep:json-patch"]
 units-builtins = ["dep:parse-size"]
 rand-builtins = ["rng"]
 yaml-builtins = ["dep:serde_yaml"]
-http-builtins = ["http", "dep:serde_yaml", "dep:duration-str"]
+http-builtins = ["http", "dep:serde_yaml", "dep:duration-str", "tokio/time"]
 urlquery-builtins = ["dep:form_urlencoded", "dep:urlencoding"]
 time-builtins = ["time", "dep:chrono-tz", "dep:duration-str", "dep:chronoutil"]
 
