@@ -46,7 +46,7 @@ pub trait EvaluationContext: Send + 'static {
         req: http::Request<String>,
         timeout: Option<Duration>,
         enable_redirect: Option<bool>,
-    ) -> impl std::future::Future<Output = Result<http::Response<String>>> + Send + Sync;
+    ) -> impl std::future::Future<Output = Result<http::Response<String>>> + Send;
 
     /// Notify the context on evaluation start, so it can clean itself up
     fn evaluation_start(&mut self);
@@ -108,7 +108,7 @@ impl EvaluationContext for DefaultContext {
         _req: http::Request<String>,
         _timeout: Option<Duration>,
         _enable_redirect: Option<bool>,
-    ) -> impl std::future::Future<Output = Result<http::Response<String>>> + Send + Sync {
+    ) -> impl std::future::Future<Output = Result<http::Response<String>>> + Send {
         // This is a stub implementation. Default context does not implement
         // actual HTTP requests due to security reasons - HTTP calls from policy
         // should be explicitly allowed/moderated by the integration.
