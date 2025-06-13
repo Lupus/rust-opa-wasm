@@ -121,7 +121,7 @@ json-builtins = ["dep:json-patch"]
 units-builtins = ["dep:parse-size"]
 rand-builtins = ["rng"]
 yaml-builtins = ["dep:serde_yaml"]
-http-builtins = ["http", "dep:serde_yaml", "dep:duration-str"]
+http-builtins = ["http", "dep:serde_yaml", "dep:duration-str", "tokio/time"]
 urlquery-builtins = ["dep:form_urlencoded", "dep:urlencoding"]
 time-builtins = ["time", "dep:chrono-tz", "dep:duration-str", "dep:chronoutil"]
 

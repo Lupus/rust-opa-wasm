@@ -107,6 +107,7 @@ async fn internal_send<C: EvaluationContext>(
     let max_retry_attempts = opa_req
         .get("max_retry_attempts")
         .and_then(serde_json::Value::as_u64)
+        .and_then(|r| u32::try_from(r).ok())
         .unwrap_or(0);
 
     let mut http_resp_res: Result<http::Response<String>> = Err(anyhow::anyhow!("unreachable"));
@@ -119,8 +120,7 @@ async fn internal_send<C: EvaluationContext>(
             break;
         }
         if max_retry_attempts > 0 {
-            #[allow(clippy::cast_possible_truncation)]
-            sleep(Duration::from_millis(500 * 2_u64.pow(attempt as u32))).await;
+            sleep(Duration::from_millis(500 * 2_u64.pow(attempt))).await;
         }
     }
 
@@ -210,8 +210,10 @@ fn convert_http_resp_to_opa_resp(
             opa_resp["body"] = parsed_body;
         }
     } else if force_yaml_decode
-        || content_type == Some("application/yaml")
-        || content_type == Some("application/x-yaml")
+        || matches!(
+            content_type,
+            Some("application/yaml" | "application/x-yaml")
+        )
     {
         if let Ok(parsed_body) = serde_yaml::from_str::<serde_json::Value>(&raw_resp_body) {
             opa_resp["body"] = parsed_body;
